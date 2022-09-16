@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+		<!-- Uso de la extension de Flask para FontAwesome -->
+		{{ fontawesome_html() }}
+
+		<title>Electro - Ecommerce</title>
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+ 		<!-- Google font -->
+ 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+ 		<!-- Bootstrap -->
+ 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+
+ 		<!-- Slick -->
+ 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/slick.css') }}"/>
+ 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/slick-theme.css') }}"/>
+
+ 		<!-- nouislider -->
+ 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/nouislider.min.css') }}"/>
+
+ 		<!-- Custom stlylesheet -->
+ 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    </head>
+	<body>
+		<!-- HEADER -->
+		<header>
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i> +34-789-456-123</a></li>
+						<li><a href="#"><i class="fa fa-envelope"></i> electro@gmail.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 41015 Seville</a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						<!-- Triggers LOGIN y SIGN UP-->
+						<li><a class="login-trigger" href="/login"
+							   data-target="#login" data-toggle="modal"><i class="fa fa-user"></i> My Account</a></li>
+						<div id="login" class="modal fade" role="dialog">
+  							<div class="modal-dialog">
+    							<div class="modal-content">
+      								<div class="modal-body">
+        								<button data-dismiss="modal" class="close">&times;</button>
+        								<h4>Login</h4>
+        								<form action="/login" method="post">
+										  <input type="text" name="username" class="username form-control" placeholder="Username"/>
+										  <input type="password" name="password" class="password form-control" placeholder="Password"/>
+										  <input class="btn login" type="submit" value="Login" />
+										</form>
+										<p></p>
+										<a href="/sign_up">SIGN UP&nbsp;&nbsp;&nbsp;&nbsp;</a><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;LOGOUT</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</ul>
+				</div>
+			</div>
+			<!-- /TOP HEADER -->
+
+			<!-- MAIN HEADER -->
+			<div id="header">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<!-- LOGO -->
+						<div class="col-md-3">
+							<div class="header-logo">
+								<a href="/" class="logo">
+									<img src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+								</a>
+							</div>
+						</div>
+						<!-- /LOGO -->
+
+						<!-- SEARCH BAR -->
+						<div class="col-md-6">
+							<div class="header-search">
+								<form action="/stock">
+									<select class="input-select" name="category" id="category">
+										<option value="" disabled selected hidden>All Categories</option>
+										<option value="Laptops">Laptops</option>
+										<option value="Smartphones">Smartphones</option>
+										<option value="Cameras">Cameras</option>
+										<option value="Accessories">Accessories</option>
+									</select>
+									<input class="input" type="text" name="search" id="search" placeholder="Search here">
+									<button class="search-btn">Search</button>
+								</form>
+							</div>
+						</div>
+						<!-- /SEARCH BAR -->
+
+						<!-- ACCOUNT -->
+						<div class="col-md-3 clearfix">
+							<div class="header-ctn">
+								<!-- Menu Toogle -->
+								<div class="menu-toggle">
+									<a href="#">
+										<i class="fa fa-bars"></i>
+										<span>Menu</span>
+									</a>
+								</div>
+								<!-- /Menu Toogle -->
+							</div>
+						</div>
+						<!-- /ACCOUNT -->
+					</div>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- /MAIN HEADER -->
+		</header>
+		<!-- /HEADER -->
+
+		<!-- NAVIGATION -->
+		<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li><a href="/admin">Home</a></li>
+						<li class="active"><a href="/stock">Stock</a></li>
+						<li><a href="/new_product">New product</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- ASIDE -->
+					<div id="aside" class="col-md-3">
+						<!-- Formulario para filtros laterales -->
+						<form class="filters" action="/stock" method="post">
+							<!-- aside Widget -->
+							<div class="form-group">
+								<div class="aside">
+									<h3 class="aside-title">Categories</h3>
+									<div class="checkbox-filter">
+										{% for category in categories_dict %}
+										<div class="input-checkbox">
+											<input type="checkbox" name="check_category" id={{category}} value={{category}}>
+											<label for={{category}}>
+												<span></span>
+												{{category}}
+												<small>({{categories_dict.get(category)}})</small>
+											</label>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<!-- /aside Widget -->
+
+							<!-- aside Widget -->
+							<div class="form-group">
+								<div class="aside">
+									<h3 class="aside-title">Price</h3>
+									<div class="price-filter">
+										<div id="price-slider"></div>
+										<div class="input-number price-min">
+											<input name="price_min" id="price-min" type="number">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
+										<span>-</span>
+										<div class="input-number price-max">
+											<input name="price_max" id="price-max" type="number">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /aside Widget -->
+
+							<!-- aside Widget -->
+							<div class="form-group">
+								<div class="aside">
+									<h3 class="aside-title">Brand</h3>
+									<div class="checkbox-filter">
+										{% for brand in brands_dict %}
+										<div class="input-checkbox">
+											<input type="checkbox" name="check_brand" id={{brand}} value={{brand}}>
+											<label for={{brand}}>
+												<span></span>
+												{{brand}}
+												<small>({{brands_dict.get(brand)}})</small>
+											</label>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<!-- /aside Widget -->
+							<button type="submit" class="filters-btn">Apply</button>
+						</form>
+						<!-- /Formulario para filtros laterales -->
+					</div>
+					<!-- /ASIDE -->
+
+					<!-- STORE -->
+					<div id="store" class="col-md-9">
+
+						<!-- Bloque para las alertas de exito o error en la gestion de productos. Si hay msg,
+						distingo entre de exito o error y la muestro. Incluyo opcion de cerrar la alerta.
+						Nota: Jinja2 falla con los boolean y recurro a int. -->
+						{% if msg %}
+							{% if success == 1 %}
+							<div class="alert alert-success" class="alert-dismissible fade show" role="alert">{{msg}}
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    								<span aria-hidden="true">&times;</span>
+  								</button>
+							</div>
+							{% else %}
+							<div class="alert alert-danger" class="alert-dismissible fade show" role="alert">{{msg}}
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    								<span aria-hidden="true">&times;</span>
+  								</button>
+							</div>
+							{% endif %}
+						{% endif %}
+
+						<!-- STOCK -->
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Id</th>
+										<th>Category</th>
+										<th>Name</th>
+										<th>Brand</th>
+										<th>Description</th>
+										<th>Purchase Price</th>
+										<th>Selling Price</th>
+										<th>Stock</th>
+										<th>Sales</th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for product in products_list.items %}
+									<tr>
+										<td>{{product.reference}}</td>
+										<td>{{product.category}}</td>
+										<td>{{product.name}}</td>
+										<td>{{product.brand}}</td>
+										<td>{{product.description}}</td>
+										<td>{{product.purchase_price}}</td>
+										<td>{{product.selling_price}}</td>
+										<td>{{product.stock}}</td>
+										<td>{{product.sales}}</td>
+										<td><a href="{{ url_for('edit_product', reference=product.reference) }}"><i class="fa fa-pencil-alt"></i></a></td>
+										<td></td>
+										<td><a href="{{ url_for('delete_product', reference=product.reference) }}"><i class="fa fa-trash-alt"></i></a></td>
+										<!-- Incluyo alerta de bajo stock y realizacion de pedido. Se activa cuando el
+										stock es menor o igual a un 10%, considerando un max. de 20 articulos -->
+										<td>
+											{% if product.stock <= (20*0.1) %}
+											<div class="alert alert-warning" role="alert">
+												<!-- Meto enlace, por si diera tiempo a desarrollar los pedidos -->
+											  <a href="#" class="alert-link">Low Stock!</a>
+											</div>
+											{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<!-- /STOCK -->
+
+						<!-- store bottom filter -->
+						<div class="store-filter clearfix">
+							<ul class="store-pagination">
+								<li class="active">{% if products_list.has_prev %}<a href="{{ url_for('stock', page=products_list.prev_num) }}"><i class="fa fa-angle-double-left"></i></a>{% else %}<i class="fa fa-angle-double-left"></i>{% endif %}</li>
+								<li class="active">{% if products_list.has_next %}<a href="{{ url_for('stock', page=products_list.next_num) }}"><i class="fa fa-angle-double-right"></i></a>{% else %}<i class="fa fa-angle-double-right"></i>{% endif %}</li>
+							</ul>
+						</div>
+						<!-- /store bottom filter -->
+					</div>
+					<!-- /STORE -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		<!-- FOOTER -->
+		<footer id="footer">
+			<!-- top footer -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">About Us</h3>
+								<p>Your IT supply company.</p>
+								<ul class="footer-links">
+									<li><a href="#"><i class="fa fa-map-marker"></i>41015 Seville</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>+34-789-456-123</a></li>
+									<li><a href="#"><i class="fa fa-envelope"></i>electro@gmail.com</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Categories</h3>
+								<ul class="footer-links">
+									<li><a href="{{ url_for('stock', filter_by_category='Laptops') }}">Laptops</a></li>
+									<li><a href="{{ url_for('stock', filter_by_category='Smartphones') }}">Smartphones</a></li>
+									<li><a href="{{ url_for('stock', filter_by_category='Cameras') }}">Cameras</a></li>
+									<li><a href="{{ url_for('stock', filter_by_category='Accessories') }}">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="clearfix visible-xs"></div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Information</h3>
+								<ul class="footer-links">
+									<li><a href="#">About Us</a></li>
+									<li><a href="#">Contact Us</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="#">Terms & Conditions</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Service</h3>
+								<ul class="footer-links">
+									<li><a class="login-trigger" href="/login" data-target="#login"
+										   data-toggle="modal">My Account</a></li>
+									<li><a href="#">Checkout</a></li>
+									<li><a href="#">Track My Order</a></li>
+									<li><a href="#">Help</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /top footer -->
+
+			<!-- bottom footer -->
+			<div id="bottom-footer" class="section">
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<span class="copyright">
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i>by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+							</span>
+						</div>
+					</div>
+						<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /bottom footer -->
+		</footer>
+		<!-- /FOOTER -->
+
+		<!-- jQuery Plugins -->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/slick.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/nouislider.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.zoom.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+	</body>
+</html>
