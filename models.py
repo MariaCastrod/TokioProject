@@ -9,7 +9,7 @@ se instancia el servidor web de Flask en este fichero y se vincula el objeto SQL
 # Se instancia el servidor web de Flask y se almacena
 app = Flask(__name__)
 # Conexion con la bbdd. Incluido el driver de mysql, instalado previamente
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:MC13ji1S@localhost/electro'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/electro'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
